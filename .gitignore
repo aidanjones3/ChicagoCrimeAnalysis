@@ -1,0 +1,4 @@
+#Dont track content of these folders
+data/
+
+*.csv
