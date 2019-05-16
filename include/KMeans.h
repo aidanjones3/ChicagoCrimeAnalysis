@@ -17,16 +17,16 @@ public:
 
   KMeans(int K, int iterations)
   {
-
     this->K = K;
     this->iterations = iterations;
   }
 
   void initialize(std::vector<CrimeRecord> &records)
   {
+    this->records = records;
     //TODO
-    this->num_of_records_ = records.size();
-    int n = records.size();
+    this->num_of_records_ = this->records.size();
+    int n = this->records.size();
     std::vector<int> data_ids;
 
     // We initialze the centroids as random indices of our records.
@@ -38,8 +38,8 @@ public:
         if(find(data_ids.begin(), data_ids.end(),index) == data_ids.end()) // NEED BETTER WAY TO CHECK IF NOT IN THERE
         {
           data_ids.push_back(index);
-          records[index].cid = i;
-          Centroid centroid(i, records[index].latitude, records[index].longitude);
+          this->records[index].cid = i;
+          Centroid centroid(i, this->records[index].latitude, this->records[index].longitude);
           this->centroids.push_back(centroid);
           break;
         }
@@ -49,7 +49,7 @@ public:
     std::cout << "Centroids Succesfully Initialized: " << this->centroids.size() << std::endl;
   }
 
-  void run(std::vector<CrimeRecord> &records)
+  void run()
   {
     //TODO
     std::cout << "Running K-Means..." << std::endl;
@@ -63,7 +63,7 @@ public:
 
       bool complete = true;
 
-      // First Step (Add All Points To Nearest Cenbtroid)
+      // First Step (Add All Points To Nearest Centroid)
       for(int i = 0; i < this->num_of_records_; i++)
       {
         int current_cid = records[i].cid;
@@ -126,6 +126,12 @@ public:
 
       counter++;
     }
+
+    for(int i = 0; i < K; i++)
+    {
+      std::cout.precision(11);
+      std::cout << centroids[i].clusterId << "\t" << centroids[i].latitude << "\t" << centroids[i].longitude << "\n";
+    }
   }
 
   int getNearestCentroid(CrimeRecord record)
@@ -155,7 +161,9 @@ public:
     return outputId;
   }
 
+
 private:
+  std::vector<CrimeRecord> records;
   int num_of_records_;
   int K;
   int iterations;
