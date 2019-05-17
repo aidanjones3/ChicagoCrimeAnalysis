@@ -162,7 +162,7 @@ public:
   }
 
 
-private:
+public:
   std::vector<CrimeRecord> records;
   int num_of_records_;
   int K;

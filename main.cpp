@@ -1,6 +1,7 @@
 #include "include/fileutils.h"
 #include "include/KMeans.h"
 #include "include/Centroid.h"
+#include "include/utilities.h"
 
 #include <vector>
 #include <string>
@@ -27,7 +28,7 @@ int main(int argc, char *argv[])
   std::string data_path = argv[1];
   std::vector<CrimeRecord> records = parseCSV(data_path);
 
-  int K = 100;
+  int K = 10;
   int iterations = 100;
 
   KMeans kmeans(K, iterations);
@@ -41,6 +42,8 @@ int main(int argc, char *argv[])
   ms d = std::chrono::duration_cast<ms>(fs);
   std::cout << "Elapsed Time in seconds: "<< fs.count() << "\n";
   cout << "Elapsed time in milliseconds : " << chrono::duration_cast<chrono::milliseconds>(end - start).count() << " ms" << endl;
+
+  writeToFile(kmeans.centroids, "results.txt");
 
 
   return 0;
