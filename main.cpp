@@ -29,12 +29,13 @@ int main(int argc, char *argv[])
   std::vector<CrimeRecord> records = parseCSV(data_path);
 
   //int K = 10;
-  int iterations = 100;
+
   std::vector<double> wss;
   double sse;
 
   for(int i = 1; i < 21; i++)
   {
+    int iterations = 50;
     int K = i;
     KMeans kmeans(K, iterations);
     kmeans.Initialize(records);

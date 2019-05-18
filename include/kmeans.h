@@ -19,6 +19,7 @@ public:
   {
     this->K = K;
     this->iterations_ = iterations;
+    std::cout << "\n" << this->iterations_ << "\n";
   }
 
   void Initialize(std::vector<CrimeRecord> &records)
@@ -189,8 +190,30 @@ public:
     }
 
     return wss;
+  }
 
+  void writeToFile(std::string output_file_path)
+  {
+    ofstream file;
+    file.open(output_file_path);
 
+    if(file.is_open())
+    {
+      for(int i = 0; i < this->centroids_.size(); i++)
+      {
+        //TODO
+        file.precision(11);
+        file << this->centroids_[i].cluster_id_ << " ";
+        file << this->centroids_[i].latitude_ << " ";
+        file << this->centroids_[i].longitude_ << " ";
+        file << std::endl;
+      }
+      file.close();
+    }
+    else
+    {
+      std::cout << "Can't Write to Output File.";
+    }
   }
 
 
