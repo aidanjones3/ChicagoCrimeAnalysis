@@ -4,14 +4,14 @@
 #pragma once
 
 #include "fileutils.h"
-#include "Centroid.h"
+#include "centroid.h"
 
 #include <iostream>
 #include <fstream>
 #include <vector>
 #include <string>
 
-using namespace FileUtils;
+using namespace fileutils;
 
 void writeToFile(std::vector<Centroid> centroids, std::string output_file_path)
 {
@@ -24,9 +24,9 @@ void writeToFile(std::vector<Centroid> centroids, std::string output_file_path)
     {
       //TODO
       file.precision(11);
-      file << centroids[i].clusterId << " ";
-      file << centroids[i].latitude << " ";
-      file << centroids[i].longitude << " ";
+      file << centroids[i].cluster_id_ << " ";
+      file << centroids[i].latitude_ << " ";
+      file << centroids[i].longitude_ << " ";
       file << std::endl;
     }
     file.close();
