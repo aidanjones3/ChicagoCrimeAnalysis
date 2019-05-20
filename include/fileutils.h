@@ -39,7 +39,7 @@ std::vector<CrimeRecord> parseCSV(string path_to_file)
     string line;
     double valid = 0;
     double invalid = 0;
-    while(getline(data, line) && valid < 100000)
+    while(getline(data, line))
     {
       bool bad_line = false;
       std::vector<std::string> tokens;

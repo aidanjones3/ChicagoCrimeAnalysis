@@ -14,17 +14,21 @@ Overview
 
 *fileutils.h* contains the definition of the data structure used to store crime records in, as well as a parsing function.
 
-*KMeans.h* contains the actual algorithm implementation using the `Centroid` class and `CrimeRecord` structure.
+*KMeans.h* contains the actual algorithm implementation using the `Centroid` class and `CrimeRecord` structure. It also contains the implementation of the distance formula between two Lat/Long points. This uses the Haversine Formula within it.
 
 ---
 Results
 ---
 
+For all tests, the number of iterations was limited to 50. The Elbow Method was first used to determine the ideal number of centroids, and then the K Means implementation was ran using the ideal number of centroids identified for the number of data points used. The results were written to text files, and GNUPlot was used to plot every point, using the third column (centroid id it belongs to) as the color field.
+
 -> ELBOW METHOD
 
-The K-Means implementation was first ran on only a percentage of the data. `N` was first chosen to be 100,000 and the number of centroids were varied from 1 -> 20. The within centroid sum of squares was calculated at each iteration, and the results were written to *results/ElbowMethodResults.txt*. GNUPlot was used to plot the results (see below). It is observed that there is a distinct "elbow" when the number of centroids is 4. After 4 centroids, there is not a great deal of improved performance in the algorithm for N = 100,000. Similar plots can be observed for a different number of data points.
+The K-Means implementation was first ran on only a percentage of the data. `N` was first chosen to be 100,000 and the number of centroids were varied from 1 -> 20. The within centroid sum of squares was calculated at each iteration, and the results were written to *results/ElbowMethodResults.txt*. GNUPlot was used to plot the results (see below). It is observed that there is a distinct "elbow" when the number of centroids is 4. After 4 centroids, there is not a great deal of improved performance in the algorithm for N = 100,000. 
 
 ![](results/ElbowMethodResults.png)
+
+The elbow method results were then visualized for `N` with the full data set (~1.5 million points).
 
 
 -> GNUPlot Centroid Visualization

@@ -1,7 +1,6 @@
 #include "include/fileutils.h"
 #include "include/kmeans.h"
 #include "include/centroid.h"
-#include "include/utilities.h"
 
 #include <vector>
 #include <string>
@@ -43,10 +42,13 @@ int main(int argc, char *argv[])
     sse = kmeans.WithinClusterSS();
     std::cout << "WSS: " << sse;
     wss.push_back(sse);
+    //kmeans.WriteCentroidsToFile("results/CentroidsLocation.txt");
+    //kmeans.WriteAllToFile("results/Points.txt");
   }
 
+
   ofstream file;
-  file.open("results/ElbowMethodResults.txt");
+  file.open("results/ElbowMethodResultsFullData.txt");
 
   if(file.is_open())
   {
@@ -63,23 +65,6 @@ int main(int argc, char *argv[])
   {
     std::cout << "Can't Write to Output File.";
   }
-
-  /*
-  KMeans kmeans(K, iterations);
-  kmeans.initialize(records);
-
-  auto start = chrono::steady_clock::now();
-  kmeans.run();
-  auto end = chrono::steady_clock::now();
-
-  fsec fs = end-start;
-  ms d = std::chrono::duration_cast<ms>(fs);
-  std::cout << "Elapsed Time in seconds: "<< fs.count() << "\n";
-  cout << "Elapsed time in milliseconds : " << chrono::duration_cast<chrono::milliseconds>(end - start).count() << " ms" << endl;
-  */
-
-  //writeToFile(kmeans.centroids, "results.txt");
-
 
   return 0;
 }

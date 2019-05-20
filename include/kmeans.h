@@ -9,6 +9,9 @@
 #include <vector>
 #include <cmath>
 
+#define _USE_MATH_DEFINES
+#include <math.h>
+
 using namespace fileutils;
 
 class KMeans
@@ -149,15 +152,20 @@ public:
     double cur_distance;
 
     // Initialize Min Distance & outputId as First clusterId
-    min_distance = sqrt( pow(centroids_[0].longitude_ - record.longitude, 2.0)
-            + pow(centroids_[0].latitude_ - record.latitude, 2.0) );
+    // min_distance = sqrt( pow(centroids_[0].longitude_ - record.longitude, 2.0)
+    //         + pow(centroids_[0].latitude_ - record.latitude, 2.0) );
+    min_distance = LatLongDistance(centroids_[0].latitude_,
+            centroids_[0].longitude_, record.latitude, record.longitude);
     outputId = centroids_[0].cluster_id_;
 
     // Then Iterate Through the Rest of the Clusters to Check if One is Closer.
     for(int i = 1; i < this->K; i++)
     {
-      cur_distance = sqrt( pow(centroids_[i].longitude_ - record.longitude, 2.0)
-              + pow(centroids_[i].latitude_ - record.latitude, 2.0) );
+      // cur_distance = sqrt( pow(centroids_[i].longitude_ - record.longitude, 2.0)
+      //         + pow(centroids_[i].latitude_ - record.latitude, 2.0) );
+
+      cur_distance = LatLongDistance(centroids_[i].latitude_,
+              centroids_[i].longitude_, record.latitude, record.longitude);
 
       if(cur_distance < min_distance)
       {
@@ -169,6 +177,33 @@ public:
     }
 
     return outputId;
+  }
+
+  double HaversineFormula(double latitude_one, double longitude_one, double latitude_two, double longitude_two)
+  {
+    double output;
+
+    double term_one = pow(sin( (latitude_two * (M_PI/180)  - latitude_one * (M_PI/180)) / 2 ), 2);
+    double term_two = cos(latitude_one * (M_PI/180));
+    double term_three = cos(latitude_two * (M_PI/180));
+    double term_four = pow(sin( (longitude_two * (M_PI/180) - longitude_one * (M_PI/180))/2 ), 2);
+
+    output = term_one + term_two * term_three * term_four;
+
+    return output;
+
+  }
+
+  double LatLongDistance(double latitude_one, double longitude_one, double latitude_two, double longitude_two)
+  {
+    double output;
+    double haversine_dist = HaversineFormula(latitude_one, longitude_one, latitude_two, longitude_two);
+
+    double term_one = 2 * atan2(sqrt(haversine_dist), sqrt(1-haversine_dist));
+
+    output = kEarthRadius * term_one;
+
+    return output;
   }
 
   double WithinClusterSS()
@@ -192,7 +227,7 @@ public:
     return wss;
   }
 
-  void writeToFile(std::string output_file_path)
+  void WriteCentroidsToFile(std::string output_file_path)
   {
     ofstream file;
     file.open(output_file_path);
@@ -216,6 +251,33 @@ public:
     }
   }
 
+  void WriteAllToFile(std::string output_file_path)
+  {
+    ofstream file;
+    file.open(output_file_path);
+
+    if(file.is_open())
+    {
+      for(int i = 0; i < this->centroids_.size(); i++)
+      {
+        for(int j = 0; j < centroids_[i].data_.size(); j++)
+        {
+          //TODO
+          file.precision(11);
+          file << this->centroids_[i].data_[j].cid << " ";
+          file << this->centroids_[i].data_[j].latitude << " ";
+          file << this->centroids_[i].data_[j].longitude << " ";
+          file << std::endl;
+        }
+      }
+      file.close();
+    }
+    else
+    {
+      std::cout << "Can't Write to Output File.";
+    }
+  }
+
 
 public:
   std::vector<CrimeRecord> records_;
@@ -223,6 +285,8 @@ public:
   int K;
   int iterations_;
   std::vector<Centroid> centroids_;
+
+  const double kEarthRadius = 6356;
 
 
 };
