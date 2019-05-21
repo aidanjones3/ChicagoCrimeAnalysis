@@ -24,18 +24,18 @@ public:
 
   void AddRecord(CrimeRecord record)
   {
-    record.cid = this->cluster_id_;
-    this->data_.push_back(record);
+    record.cid = cluster_id_;
+    data_.push_back(record);
   }
 
   bool RemoveRecord(double id)
   {
-    int size = this->data_.size();
+    int size = data_.size();
     for(int i = 0; i < size; i++)
     {
-      if(this->data_[i].id == id)
+      if(data_[i].id == id)
       {
-        this->data_.erase(this->data_.begin() + i);
+        data_.erase(data_.begin() + i);
         return true;
       }
     }

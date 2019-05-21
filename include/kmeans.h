@@ -22,7 +22,6 @@ public:
   {
     this->K = K;
     this->iterations_ = iterations;
-    std::cout << "\n" << this->iterations_ << "\n";
   }
 
   void Initialize(std::vector<CrimeRecord> &records)
@@ -30,7 +29,7 @@ public:
     this->records_ = records;
     //TODO
     this->num_of_records_ = this->records_.size();
-    int n = this->records_.size();
+    int n = num_of_records_.size();
     std::vector<int> data_ids;
 
     // We initialze the centroids as random indices of our records.
@@ -42,19 +41,19 @@ public:
         if(find(data_ids.begin(), data_ids.end(),index) == data_ids.end())
         {
           data_ids.push_back(index);
-          this->records_[index].cid = i;
+          records_[index].cid = i;
 
-          Centroid centroid(i, this->records_[index].latitude,
-                  this->records_[index].longitude);
+          Centroid centroid(i, records_[index].latitude,
+                  records_[index].longitude);
 
-          this->centroids_.push_back(centroid);
+          centroids_.push_back(centroid);
           break;
         }
       }
     }
 
     std::cout << "Centroids Succesfully Initialized: "
-            << this->centroids_.size() << std::endl;
+            << centroids_.size() << std::endl;
   }
 
   void Run()
@@ -72,7 +71,7 @@ public:
       bool complete = true;
 
       // First Step (Add All Points To Nearest Centroid)
-      for(int i = 0; i < this->num_of_records_; i++)
+      for(int i = 0; i < num_of_records_; i++)
       {
         int current_cid = records_[i].cid;
         int closest_cid = GetNearestCentroid(records_[i]);
@@ -83,7 +82,7 @@ public:
           // remove it from that centroid
           if(current_cid != 0){
 
-            for(int j = 0; j < this->K; j++){
+            for(int j = 0; j < K; j++){
 
               if(centroids_[j].cluster_id_ == current_cid){
                 centroids_[j].RemoveRecord(records_[i].id);
@@ -127,7 +126,7 @@ public:
         centroids_[i].latitude_ = lat_sum;
       }
 
-      if(complete || counter >= this->iterations_)
+      if(complete || counter >= iterations_)
       {
         std::cout << "Clustering completed at iteration: "
                 << counter << std::endl;
@@ -213,14 +212,14 @@ public:
 
     for(int i = 0; i < this->K; i++)
     {
-      for(int j = 0; j < this->centroids_[i].data_.size(); j++)
+      for(int j = 0; j < centroids_[i].data_.size(); j++)
       {
 
-        wss += pow(this->centroids_[i].data_[j].latitude
-                - this->centroids_[i].latitude_,2);
+        wss += pow(centroids_[i].data_[j].latitude
+                - centroids_[i].latitude_,2);
 
-        wss += pow(this->centroids_[i].data_[j].longitude
-                - this->centroids_[i].longitude_,2);
+        wss += pow(centroids_[i].data_[j].longitude
+                - centroids_[i].longitude_,2);
       }
     }
 
@@ -238,9 +237,9 @@ public:
       {
         //TODO
         file.precision(11);
-        file << this->centroids_[i].cluster_id_ << " ";
-        file << this->centroids_[i].latitude_ << " ";
-        file << this->centroids_[i].longitude_ << " ";
+        file << centroids_[i].cluster_id_ << " ";
+        file << centroids_[i].latitude_ << " ";
+        file << centroids_[i].longitude_ << " ";
         file << std::endl;
       }
       file.close();
@@ -264,9 +263,9 @@ public:
         {
           //TODO
           file.precision(11);
-          file << this->centroids_[i].data_[j].cid << " ";
-          file << this->centroids_[i].data_[j].latitude << " ";
-          file << this->centroids_[i].data_[j].longitude << " ";
+          file << centroids_[i].data_[j].cid << " ";
+          file << centroids_[i].data_[j].latitude << " ";
+          file << centroids_[i].data_[j].longitude << " ";
           file << std::endl;
         }
       }
