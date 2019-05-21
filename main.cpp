@@ -32,23 +32,23 @@ int main(int argc, char *argv[])
   std::vector<double> wss;
   double sse;
 
-  for(int i = 1; i < 21; i++)
-  {
-    int iterations = 50;
-    int K = i;
-    KMeans kmeans(K, iterations);
-    kmeans.Initialize(records);
-    kmeans.Run();
-    sse = kmeans.WithinClusterSS();
-    std::cout << "WSS: " << sse;
-    wss.push_back(sse);
-    //kmeans.WriteCentroidsToFile("results/CentroidsLocation.txt");
-    //kmeans.WriteAllToFile("results/Points.txt");
-  }
+
+  int iterations = 50;
+  int K = 5;
+  KMeans kmeans(K, iterations);
+  kmeans.Initialize(records);
+  kmeans.Run();
+  //sse = kmeans.WithinClusterSS();
+  //std::cout << "WSS: " << sse;
+  //wss.push_back(sse);
+  kmeans.WriteCentroidsToFile("results/CentroidsLocation.txt");
+  kmeans.WriteAllToFile("results/Points.txt");
 
 
+
+  /*
   ofstream file;
-  file.open("results/ElbowMethodResultsFullData.txt");
+  file.open("results/ElbowMethodResultsPartialData.txt");
 
   if(file.is_open())
   {
@@ -65,6 +65,7 @@ int main(int argc, char *argv[])
   {
     std::cout << "Can't Write to Output File.";
   }
+  */
 
   return 0;
 }
