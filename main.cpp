@@ -9,6 +9,8 @@
 #include <chrono>
 #include <unistd.h>
 #include <ratio>
+#include <stdlib.h>
+#include <stdio.h>
 
 typedef std::chrono::high_resolution_clock Time;
 typedef std::chrono::milliseconds ms;
@@ -18,54 +20,27 @@ using namespace fileutils;
 
 int main(int argc, char *argv[])
 {
-  if(argc < 1)
+  if(argc < 3)
   {
-    std::cerr << "Please provide a path to data." << std::endl;
+    std::cerr << "Please provide a path to data, the number of max iterations, and the number of clusters to initialize." << std::endl;
     return -1;
   }
 
   std::string data_path = argv[1];
+  int iterations = atoi(argv[2]);
+  int K = atoi(argv[3]);
+
+
   std::vector<CrimeRecord> records = parseCSV(data_path);
-
-  //int K = 10;
-
-  std::vector<double> wss;
-  double sse;
-
-
-  int iterations = 50;
-  int K = 5;
   KMeans kmeans(K, iterations);
   kmeans.Initialize(records);
   kmeans.Run();
-  //sse = kmeans.WithinClusterSS();
-  //std::cout << "WSS: " << sse;
-  //wss.push_back(sse);
-  kmeans.WriteCentroidsToFile("results/CentroidsLocation.txt");
-  kmeans.WriteAllToFile("results/Points.txt");
+
+  //kmeans.WriteCentroidsToFile("results/CentroidsLocation.txt");
+  //kmeans.WriteAllToFile("results/Points.txt");
 
 
 
-  /*
-  ofstream file;
-  file.open("results/ElbowMethodResultsPartialData.txt");
-
-  if(file.is_open())
-  {
-    for(int i = 1; i < 21; i++)
-    {
-      //TODO
-      file << i << " ";
-      file << wss[i] << " ";
-      file << std::endl;
-    }
-    file.close();
-  }
-  else
-  {
-    std::cout << "Can't Write to Output File.";
-  }
-  */
 
   return 0;
 }
