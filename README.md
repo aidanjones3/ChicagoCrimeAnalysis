@@ -48,7 +48,21 @@ The plot below illustrates the results of the clustering algorithm using the ful
 ![](results/FinalResults.png)
 
 ---
-TO DO
+Analysis
 ---
 
-The implementation still has to be run on the records of crimes before 2012, to visualize how the high crime locations have shifted. The other data files will be downloaded from the same source as above, and the same implementation will be followed.
+The limitations of the K-Means algorithm can be easily identified from the results shown above. K-Means is more accurate on data that is non-uniform. Because the data in question is crime records, which is based on the city structure and is inherently geometric, K-Means will provide us with centroids still, but leads to a somewhat unimpressive result as shown above.
+
+Other issues with the K-Means algorithm that were apparent:
+
+  1. There is a large sensitivity to the size of the data. Changing the scale of the data completely changes the results we achieve, as we saw when down-sampling the data and observing the withing centroid sum of squares.
+
+  2. Results are varied on different runs of the implementation, as the initial centroid locations are random, creating inconsistency.
+
+---
+Future Work/In Progress
+---
+
+The dataset I am working with is large, and has outliers within it. This analysis would benefit from developing a HDBSCAN method instead. This method is less sensitive to noise, and doesn't force any outliers in clusters. (In Progress)
+
+Another interesting path is to see how the crime clusters with the changing of seasons as well. (To Do)
